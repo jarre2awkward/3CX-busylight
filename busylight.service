@@ -1,0 +1,11 @@
+[Unit]
+Description=3CX Busylight Monitor
+After=network.target
+
+[Service]
+ExecStart=/home/pi/3CX-licht/busylight-venv/bin/python3 /usr/local/bin/licht.py
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
