@@ -1,50 +1,43 @@
 #!/bin/bash
-
 set -e
 
-echo "📦 Starting 3CX Busylight Setup..."
+echo "📦 Busylight installatie gestart..."
 
-# Create virtual environment
-echo "🐍 Creating Python virtual environment..."
+mkdir -p ~/3CX-licht
 python3 -m venv ~/3CX-licht/busylight-venv
 source ~/3CX-licht/busylight-venv/bin/activate
 
-# Upgrade pip and install requirements
-echo "⬆️ Upgrading pip and installing dependencies..."
+echo "⬆️ Pip en requirements..."
 pip install --upgrade pip
-pip install -r ~/3CX-busylight/requirements.txt
+pip install -r requirements.txt
 
-# Create logs folder
-echo "📝 Creating log folder..."
-mkdir -p /home/$USER/logs
-touch /home/$USER/logs/cronlog
-chmod -R 777 /home/$USER/logs
+echo "📁 Log directory maken..."
+mkdir -p /home/pi/logs
+touch /home/pi/logs/cronlog
+chmod -R 777 /home/pi/logs
 
-# ✅ Show USB Devices
-echo "🔌 Connected USB devices:"
+echo "🔌 USB devices aangesloten:"
 lsusb
 echo ""
-read -p "🔍 Enter the line number of the Busylight device (starting from 1): " line_number
+read -p "👉 Nummer van de Busylight regel in lsusb (bv. 2): " lineno
 
-# ✅ Extract Vendor ID and Product ID
-usb_line=$(lsusb | sed -n "${line_number}p")
+usb_line=$(lsusb | sed -n "${lineno}p")
 vendor_id=$(echo "$usb_line" | awk '{print $6}' | cut -d: -f1)
 product_id=$(echo "$usb_line" | awk '{print $6}' | cut -d: -f2)
 
-echo "✅ Detected Vendor ID: $vendor_id, Product ID: $product_id"
-
-# ✅ Create udev rule
-echo "🛠 Adding udev rule for Busylight..."
+echo "🛠 Voeg udev rule toe..."
 echo "SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"$vendor_id\", ATTRS{idProduct}==\"$product_id\", MODE=\"666\"" | sudo tee /etc/udev/rules.d/99-busylight.rules > /dev/null
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-# ✅ Install systemd service
-echo "🔧 Installing and enabling systemd service..."
-sudo cp "$(pwd)/busylight.service" /etc/systemd/system/
+echo "🧠 Kopieer licht.py naar juiste locatie..."
+sudo cp licht.py /usr/local/bin/licht.py
+sudo chmod +x /usr/local/bin/licht.py
+
+echo "🔧 Systemd service installeren..."
+sudo cp busylight.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable busylight.service
 sudo systemctl start busylight.service
 
-echo "✅ Setup complete. Busylight should now run in the background."
-
+echo "✅ Setup voltooid! Busylight draait nu op de achtergrond."
