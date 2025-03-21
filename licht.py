@@ -7,7 +7,7 @@ from busylight.lights import Light
 # 3CX API Credentials
 API_URL = "https://pdss.3cx.eu/connect/token"
 EXTENSIONS_TO_MONITOR = ["211", "206", "207", "202", "213", "203"]
-LOG_FILE = "/home/jarre/logs/cronlog"
+LOG_FILE = "/home/pi/logs/cronlog"
 
 CLIENT_ID = "api"
 CLIENT_SECRET = "ImJEGB5bgnCiSmv17EXZihEvnXwhsdNl"
