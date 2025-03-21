@@ -12,7 +12,7 @@ source ~/3CX-licht/busylight-venv/bin/activate
 # Upgrade pip and install requirements
 echo "⬆️ Upgrading pip and installing dependencies..."
 pip install --upgrade pip
-pip install -r ~/3CX-licht/requirements.txt
+pip install -r ~/3CX-light/requirements.txt
 
 # Create logs folder
 echo "📝 Creating log folder..."
