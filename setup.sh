@@ -41,7 +41,7 @@ sudo udevadm trigger
 
 # ✅ Install systemd service
 echo "🔧 Installing and enabling systemd service..."
-sudo cp ~/3CX-licht/busylight.service /etc/systemd/system/busylight.service
+sudo cp "$(pwd)/busylight.service" /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable busylight.service
 sudo systemctl start busylight.service
