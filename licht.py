@@ -8,7 +8,7 @@ from busylight.lights import Light
 # 🔧 Deze waarden worden overschreven via setup.sh
 API_URL = "https://your-3cx-url/connect/token"
 EXTENSIONS_TO_MONITOR = ["201", "202"]
-CLIENT_ID = "pdssapi"
+CLIENT_ID = "default-client-id"
 CLIENT_SECRET = "your_api_key_here"
 LOG_FILE = "/home/PDSS/logs/cronlog"
 
