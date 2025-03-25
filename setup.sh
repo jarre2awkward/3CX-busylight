@@ -1,43 +1,57 @@
 #!/bin/bash
+
 set -e
 
-echo "📦 Busylight installatie gestart..."
+echo "📦 Starting 3CX Busylight Setup..."
 
-mkdir -p ~/3CX-licht
-python3 -m venv ~/3CX-licht/busylight-venv
-source ~/3CX-licht/busylight-venv/bin/activate
+# Ask for extensions and PBX domain
+read -p "📞 Enter the extension numbers to monitor (comma-separated, e.g. 201,202,203): " extensions_input
+read -p "🌐 Enter the PBX monitor domain (e.g. https://pdss.3cx.eu): " pbx_domain
 
-echo "⬆️ Pip en requirements..."
+# Replace placeholders in licht.py
+sed -i "s|EXTENSIONS_TO_MONITOR = .*|EXTENSIONS_TO_MONITOR = [$(echo $extensions_input | sed 's/,/\", \"/g; s/^/\"/; s/$/\"]/')|" /home/PDSS/3CX-busylight/licht.py
+sed -i "s|API_URL = .*|API_URL = \"$pbx_domain/connect/token\"|" /home/PDSS/3CX-busylight/licht.py
+
+# Create virtual environment
+echo "🐍 Creating Python virtual environment..."
+python3 -m venv /home/PDSS/3CX-licht/busylight-venv
+source /home/PDSS/3CX-licht/busylight-venv/bin/activate
+
+# Upgrade pip and install requirements
+echo "⬆️ Upgrading pip and installing dependencies..."
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r /home/PDSS/3CX-busylight/requirements.txt
 
-echo "📁 Log directory maken..."
-mkdir -p /home/pi/logs
-touch /home/pi/logs/cronlog
-chmod -R 777 /home/pi/logs
+# Create logs folder
+echo "📝 Creating log folder..."
+mkdir -p /home/PDSS/logs
+touch /home/PDSS/logs/cronlog
+chmod -R 777 /home/PDSS/logs
 
-echo "🔌 USB devices aangesloten:"
+# ✅ Show USB Devices
+echo "🔌 Connected USB devices:"
 lsusb
 echo ""
-read -p "👉 Nummer van de Busylight regel in lsusb (bv. 2): " lineno
+read -p "🔍 Enter the line number of the Busylight device (starting from 1): " line_number
 
-usb_line=$(lsusb | sed -n "${lineno}p")
+# ✅ Extract Vendor ID and Product ID
+usb_line=$(lsusb | sed -n "${line_number}p")
 vendor_id=$(echo "$usb_line" | awk '{print $6}' | cut -d: -f1)
 product_id=$(echo "$usb_line" | awk '{print $6}' | cut -d: -f2)
 
-echo "🛠 Voeg udev rule toe..."
+echo "✅ Detected Vendor ID: $vendor_id, Product ID: $product_id"
+
+# ✅ Create udev rule
+echo "🛠 Adding udev rule for Busylight..."
 echo "SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"$vendor_id\", ATTRS{idProduct}==\"$product_id\", MODE=\"666\"" | sudo tee /etc/udev/rules.d/99-busylight.rules > /dev/null
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-echo "🧠 Kopieer licht.py naar juiste locatie..."
-sudo cp licht.py /usr/local/bin/licht.py
-sudo chmod +x /usr/local/bin/licht.py
-
-echo "🔧 Systemd service installeren..."
-sudo cp busylight.service /etc/systemd/system/
+# ✅ Install systemd service
+echo "🔧 Installing and enabling systemd service..."
+sudo cp /home/PDSS/3CX-busylight/busylight.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable busylight.service
 sudo systemctl start busylight.service
 
-echo "✅ Setup voltooid! Busylight draait nu op de achtergrond."
+echo "✅ Setup complete. Busylight should now run in the background."
