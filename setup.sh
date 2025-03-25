@@ -7,11 +7,13 @@ echo "📦 Setup starten..."
 # Vraag input voor extensies, PBX en API key
 read -p "🌐 Geef je PBX domein in (e.g. https://pdss.3cx.eu): " pbx_domain
 read -p "📞 Geef de extensienummers die je wilt monitoren in (Afgezonderd per komma, e.g. 201,202,203): " extensions_input
+read -p "Geef de Client ID op voor deze installatie: " client_id
 read -p "🔑 Geef je API Key: " api_key
 
 # Pas licht.py aan met opgegeven gegevens
 sed -i "s|EXTENSIONS_TO_MONITOR = .*|EXTENSIONS_TO_MONITOR = [$(echo $extensions_input | sed 's/,/\", \"/g; s/^/\"/; s/$/\"/')]|" /home/PDSS/3CX-busylight/licht.py
 sed -i "s|API_URL = .*|API_URL = \"$pbx_domain/connect/token\"|" /home/PDSS/3CX-busylight/licht.py
+sed -i "s|CLIENT_ID = .*|CLIENT_ID = \"$client_id\"|" /home/PDSS/3CX-busylight/licht.py
 sed -i "s|CLIENT_SECRET = .*|CLIENT_SECRET = \"$api_key\"|" /home/PDSS/3CX-busylight/licht.py
 
 # Maak virtualenv aan
