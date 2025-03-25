@@ -2,15 +2,18 @@ import requests
 import time
 import os
 import threading
+from urllib.parse import urlparse
 from busylight.lights import Light
 
-# 🧠 Prompt voor PBX URL en extensies
-# DO NOT MODIFY – setup.sh will update these
+# 🔧 Deze waarden worden overschreven via setup.sh
 API_URL = "https://your-3cx-url/connect/token"
 EXTENSIONS_TO_MONITOR = ["201", "202"]
 CLIENT_ID = "pdssapi"
 CLIENT_SECRET = "your_api_key_here"
 LOG_FILE = "/home/PDSS/logs/cronlog"
+
+# Extract base URL for call control
+PBX_BASE = urlparse(API_URL).scheme + "://" + urlparse(API_URL).hostname
 
 # Initialize Busylight
 light = Light.first_light()
