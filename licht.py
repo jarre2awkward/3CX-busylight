@@ -5,14 +5,12 @@ import threading
 from busylight.lights import Light
 
 # 🧠 Prompt voor PBX URL en extensies
-PBX_BASE = input("🔧 Enter the base URL of your PBX (e.g. https://pdss.3cx.eu): ").strip().rstrip("/")
-EXTENSIONS_INPUT = input("📞 Enter the extensions to monitor (comma-separated, e.g. 211,206,207): ")
-EXTENSIONS_TO_MONITOR = [ext.strip() for ext in EXTENSIONS_INPUT.split(",")]
-API_URL = f"{PBX_BASE}/connect/token"
-LOG_FILE = "/home/PDSS/logs/cronlog"
-
+# DO NOT MODIFY – setup.sh will update these
+API_URL = "https://your-3cx-url/connect/token"
+EXTENSIONS_TO_MONITOR = ["201", "202"]
 CLIENT_ID = "api"
-CLIENT_SECRET = "ImJEGB5bgnCiSmv17EXZihEvnXwhsdNl"
+CLIENT_SECRET = "your_api_key_here"
+LOG_FILE = "/home/PDSS/logs/cronlog"
 
 # Initialize Busylight
 light = Light.first_light()
