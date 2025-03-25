@@ -3,12 +3,9 @@ Description=3CX Busylight Monitor
 After=network.target
 
 [Service]
-ExecStart=/home/pi/3CX-licht/busylight-venv/bin/python3 /usr/local/bin/licht.py
+ExecStart=/home/PDSS/3CX-licht/busylight-venv/bin/python3 /usr/local/bin/licht.py
 Restart=always
-User=pi
-WorkingDirectory=/home/pi
-StandardOutput=append:/home/pi/logs/cronlog
-StandardError=append:/home/pi/logs/cronlog
+User=PDSS
 
 [Install]
 WantedBy=multi-user.target
