@@ -48,6 +48,10 @@ echo "SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"$vendor_id\", ATTRS{idProduct}==\"$
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
+# Kopieer licht.py
+sudo cp /home/PDSS/3CX-busylight/licht.py /usr/local/bin/
+sudo chmod +x /usr/local/bin/licht.py
+
 # Installeer en start systemd service
 echo "🔧 Installeren van systemd service..."
 sudo cp /home/PDSS/3CX-busylight/busylight.service /etc/systemd/system/
