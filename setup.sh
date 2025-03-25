@@ -10,7 +10,7 @@ read -p "📞 Geef de extensienummers die je wilt monitoren in (Afgezonderd per 
 read -p "🔑 Geef je API Key: " api_key
 
 # Pas licht.py aan met opgegeven gegevens
-sed -i "s|EXTENSIONS_TO_MONITOR = .*|EXTENSIONS_TO_MONITOR = [$(echo $extensions_input | sed 's/,/\", \"/g; s/^/\"/; s/$/\"]/')]|" /home/PDSS/3CX-busylight/licht.py
+sed -i "s|EXTENSIONS_TO_MONITOR = .*|EXTENSIONS_TO_MONITOR = [$(echo $extensions_input | sed 's/,/\", \"/g; s/^/\"/; s/$/\"/')]|" /home/PDSS/3CX-busylight/licht.py
 sed -i "s|API_URL = .*|API_URL = \"$pbx_domain/connect/token\"|" /home/PDSS/3CX-busylight/licht.py
 sed -i "s|CLIENT_SECRET = .*|CLIENT_SECRET = \"$api_key\"|" /home/PDSS/3CX-busylight/licht.py
 
