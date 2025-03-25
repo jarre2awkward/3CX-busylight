@@ -6,7 +6,7 @@ echo "📦 Setup starten..."
 
 # Vraag input voor extensies, PBX en API key
 read -p "🌐 Geef je PBX domein in (e.g. https://pdss.3cx.eu): " pbx_domain
-read -p "📞 Geef de extensienummers die je wilt monitoren in (comma-separated, e.g. 201,202,203): " extensions_input
+read -p "📞 Geef de extensienummers die je wilt monitoren in (Afgezonderd per komma, e.g. 201,202,203): " extensions_input
 read -p "🔑 Geef je API Key: " api_key
 
 # Pas licht.py aan met opgegeven gegevens
